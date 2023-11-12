@@ -6,16 +6,18 @@ import GUI from "lil-gui";
 import colors from "nice-color-palettes";
 
 // const index = Math.floor(Math.random() * colors.length);
-// const index = 93;
-// let palette = colors[index];
-// palette = palette.map((color) => new THREE.Color(color)); 
-const palette = [
-	new THREE.Color(0.6549019607843137, 0.7725490196078432, 0.7411764705882353),
-	new THREE.Color(0.8980392156862745, 0.8666666666666667, 0.796078431372549),
-	new THREE.Color(0.9215686274509803, 0.4823529411764706, 0.34901960784313724),
-	new THREE.Color(0.8117647058823529, 0.27450980392156865, 0.2784313725490196),
-	new THREE.Color(0.3215686274509804, 0.27450980392156865, 0.33725490196078434),
-];
+const index = 89;
+let palette = colors[index];
+palette = palette.map((color) => new THREE.Color(color)); 
+
+
+// const palette = [
+// 	new THREE.Color( 78/225,  12/225, 112/225 ),   // Dark Purple
+// 	new THREE.Color( 70/225,  20/225, 99/225 ),   // 
+// 	new THREE.Color( 54/225,  1/225,  73/225 ),  // 
+// 	new THREE.Color( 45/225,  40/225,  60/225 ),  // 
+// 	new THREE.Color( 37/225,  0/225, 48/225 ),   // 
+// ];
 
 const debounce = (func, delay) => {
   let timer;
@@ -39,19 +41,19 @@ export default class Sketch {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0xeeeeee, 1);
-    this.renderer.physicallyCorrectLights = true;
+    // this.renderer.physicallyCorrectLights = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     this.container.appendChild(this.renderer.domElement);
 
     this.camera = new THREE.PerspectiveCamera(
-      70,
+      45,
       window.innerWidth / window.innerHeight,
       0.001,
       1000
     );
 
-    this.camera.position.set(0, 0, 0.2);
+    this.camera.position.set(0, 0, 4);
     this.time = 0;
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -109,10 +111,10 @@ export default class Sketch {
       },
       vertexShader: vertex,
       fragmentShader: fragment,
-    //   wireframe: true,
+      // wireframe: true,
     });
 
-    this.geometry = new THREE.PlaneGeometry(3, 3, 100, 100);
+    this.geometry = new THREE.PlaneGeometry(9, 5, 100, 100);
     this.plane = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.plane);
   }
@@ -120,10 +122,12 @@ export default class Sketch {
   addLights() {
     const light = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(light);
+    // light.castShadow = true;
 
     const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
     light2.position.set(5, 3, 5);
     this.scene.add(light2);
+    // light2.castShadow = true;
   }
 
   stop() {
@@ -138,6 +142,8 @@ export default class Sketch {
   }
 
   render() {
+    // console.log(this.camera.projectionMatrix);
+
     if (!this.isPlaying) return;
     this.time += 0.0001;
     this.material.uniforms.time.value = this.time;
