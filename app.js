@@ -123,12 +123,14 @@ export default class Sketch {
 
   addLights() {
     const light = new THREE.AmbientLight(0xffffff, 0.5);
-    this.scene.add(light);
+    this.scene.add( light );
     // light.castShadow = true;
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-    light2.position.set(5, 3, 5);
-    this.scene.add(light2);
+    const light2 = new THREE.DirectionalLight(0xffffff, 20);
+    const helper = new THREE.DirectionalLightHelper( light2, 5 );
+    this.scene.add( helper );
+    light2.position.set(0, 1.5, 0);
+    this.scene.add( light2 );
     light2.castShadow = true;
   }
 
