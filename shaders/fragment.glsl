@@ -8,6 +8,6 @@ varying vec3 vColor;
 float PI = 3.141592653589793238;
 
 void main() {
-	gl_FragColor = vec4(vUv, 0.0, 1.);
-	gl_FragColor = vec4(vColor, 10);
+	gl_FragColor = vec4(vUv, 0.0, 0.4);
+	gl_FragColor = vec4(vColor, 5);
 }

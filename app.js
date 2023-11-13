@@ -1,23 +1,23 @@
-import * as THREE from "three";
-import fragment from "./shaders/fragment.glsl";
-import vertex from "./shaders/vertex.glsl";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import GUI from "lil-gui";
-import colors from "nice-color-palettes";
+import * as THREE from 'three';
+import fragment from './shaders/fragment.glsl';
+import vertex from './shaders/vertex.glsl';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import GUI from 'lil-gui';
+import colors from 'nice-color-palettes';
 
 // const index = Math.floor(Math.random() * colors.length);
-const index = 89;
-let palette = colors[index];
-palette = palette.map((color) => new THREE.Color(color)); 
+// const index = 96;
+// let palette = colors[index];
+// palette = palette.map((color) => new THREE.Color(color));
 
-
-// const palette = [
-// 	new THREE.Color( 78/225,  12/225, 112/225 ),   // Dark Purple
-// 	new THREE.Color( 70/225,  20/225, 99/225 ),   // 
-// 	new THREE.Color( 54/225,  1/225,  73/225 ),  // 
-// 	new THREE.Color( 45/225,  40/225,  60/225 ),  // 
-// 	new THREE.Color( 37/225,  0/225, 48/225 ),   // 
-// ];
+const palette = [
+	new THREE.Color( 88/225,   12/225, 132/225 ),   
+	new THREE.Color( 50/225,  10/225, 119/225 ),   
+  new THREE.Color( 7/225,   0/225,  8/225 ),  
+	new THREE.Color( 114/225,   11/225,  83/225 ),  
+	new THREE.Color( 55/225,  10/225,  50/225 ),  
+	 
+];
 
 const debounce = (func, delay) => {
   let timer;
@@ -41,7 +41,7 @@ export default class Sketch {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0xeeeeee, 1);
-    // this.renderer.physicallyCorrectLights = true;
+    this.renderer.physicallyCorrectLights = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     this.container.appendChild(this.renderer.domElement);
@@ -53,7 +53,8 @@ export default class Sketch {
       1000
     );
 
-    this.camera.position.set(0, 0, 4);
+    // TODO update comera position based on window size
+    this.camera.position.set(0., 0, 1.2);
     this.time = 0;
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -67,7 +68,7 @@ export default class Sketch {
     this.setupResize();
 
     window.addEventListener(
-      "resize",
+      'resize',
       debounce(() => {
         const width = window.innerWidth;
         const height = window.innerHeight;
@@ -85,23 +86,24 @@ export default class Sketch {
       progress: 0,
     };
     this.gui = new GUI();
-    this.gui.add(this.settings, "progress", 0, 1, 0.01);
+    this.gui.add(this.settings, 'progress', 0, 1, 0.01);
   }
 
   setupResize() {
-    window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener('resize', this.resize.bind(this));
   }
 
   resize() {
     this.camera.aspect = this.width / this.height;
     this.camera.updateProjectionMatrix();
+
   }
 
   addObjects() {
     let that = this;
     this.material = new THREE.ShaderMaterial({
       extensions: {
-        derivatives: "#extension GL_OES_standard_derivatives : enable",
+        derivatives: '#extension GL_OES_standard_derivatives : enable',
       },
       side: THREE.DoubleSide,
       uniforms: {
@@ -114,7 +116,7 @@ export default class Sketch {
       // wireframe: true,
     });
 
-    this.geometry = new THREE.PlaneGeometry(9, 5, 100, 100);
+    this.geometry = new THREE.PlaneGeometry(3, 3, 200, 200);
     this.plane = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.plane);
   }
@@ -127,7 +129,7 @@ export default class Sketch {
     const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
     light2.position.set(5, 3, 5);
     this.scene.add(light2);
-    // light2.castShadow = true;
+    light2.castShadow = true;
   }
 
   stop() {
@@ -142,7 +144,7 @@ export default class Sketch {
   }
 
   render() {
-    // console.log(this.camera.projectionMatrix);
+    
 
     if (!this.isPlaying) return;
     this.time += 0.0001;
@@ -153,5 +155,5 @@ export default class Sketch {
 }
 
 new Sketch({
-  dom: document.getElementById("container"),
+  dom: document.getElementById('container'),
 });
