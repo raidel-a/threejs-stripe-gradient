@@ -149,7 +149,7 @@ export default class Sketch {
     
 
     if (!this.isPlaying) return;
-    this.time += 0.0001;
+    this.time += 0.00009;
     this.material.uniforms.time.value = this.time;
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.render.bind(this));
